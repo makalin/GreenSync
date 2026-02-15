@@ -99,6 +99,59 @@ Mobile builds are located under:
 /backend
 ```
 
+## 🧱 Project Layout
+
+| Path | Description |
+| --- | --- |
+| `backend/` | Node.js + Express mock SPaT API that models a few smart-city corridors and computes optimal speed suggestions. |
+| `app-android/` | Jetpack Compose client that consumes the backend, visualises the current phase, and lists the nearest signals. |
+| `app-ios/` | SwiftUI client with the same feature set as Android, sharing the DTOs/flow with async/await networking. |
+
+## 🚀 Getting Started
+
+### 1. Backend API
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+The service listens on `http://localhost:4000` by default. You can tweak intersections inside `src/data/intersections.js` or change cycle logic in `src/utils.js`.
+
+**New pro endpoints**
+
+| Endpoint | Description |
+| --- | --- |
+| `GET /api/insights/cities` | Aggregated metrics per connected city (avg delay, next signals, corridor count). |
+| `GET /api/routes/forecast?city=Berlin` | Predictive planner that surfaces the best corridors and speeds for an optional city filter. |
+| `POST /api/simulations/approach` | Lightweight simulator that tells a driver whether they will stay within the green wave for an intersection + starting speed. |
+
+These additions feed both mobile apps so you can demo real-time analytics even without a live SPaT feed.
+
+### 2. Android app (Jetpack Compose)
+
+* Requires Android Studio Iguana+ and JDK 17.
+* Update `BuildConfig.API_BASE_URL` inside `app/build.gradle.kts` if your backend runs on a different host/port. The default `http://10.0.2.2:4000` works for the Android emulator.
+* Open `app-android/` in Android Studio and run the **GreenSync** configuration, or execute `./gradlew assembleDebug` after generating a Gradle wrapper locally (`gradle wrapper`).
+
+The UI automatically fetches a recommendation plus three nearby signals and refreshes on pull-to-refresh.
+New cards surface:
+
+* **Approach Simulator** — whether you will hold the green wave + recommended adjustment.
+* **City Insights** — aggregated smart-city stats for each available corridor.
+* **Route Forecast** — a mini control center for planning a multi-signal approach.
+
+### 3. iOS app (SwiftUI)
+
+* Open `app-ios/GreenSync.xcodeproj` with Xcode 15+.
+* Ensure the backend is reachable from the simulator. The client points to `http://localhost:4000`; change `baseURL` in `Services/GreenSyncAPI.swift` if you deploy elsewhere (use your machine IP for physical devices).
+* Select the **GreenSync** scheme and press Run.
+
+SwiftUI mirrors the Compose experience: simulator insights, signal list, aggregated metrics, and forecast cards all refresh with one tap.
+
+## 🧪 Roadmap
+
 ---
 
 ## 🧪 Roadmap

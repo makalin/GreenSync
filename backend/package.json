@@ -1,0 +1,14 @@
+{
+  "name": "greensync-backend",
+  "version": "1.0.0",
+  "description": "Sample backend for the GreenSync traffic light advisor.",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node src/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}
